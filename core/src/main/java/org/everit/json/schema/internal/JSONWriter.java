@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import java8.util.stream.StreamSupport;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,7 +79,7 @@ class JSONWriter {
     private static final Pattern NUMBER_PATTERN = Pattern.compile("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?");
 
     private static boolean subclassOfJSONString(Class<?> clazz) {
-        return clazz != null && (Arrays.stream(clazz.getInterfaces())
+        return clazz != null && (StreamSupport.stream(Arrays.asList(clazz.getInterfaces()))
                 .anyMatch(intf -> "org.json.JSONString".equals(intf.getCanonicalName()))
                 || subclassOfJSONString(clazz.getSuperclass()));
     }

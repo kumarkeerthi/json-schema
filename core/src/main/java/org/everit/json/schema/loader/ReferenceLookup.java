@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java8.util.stream.StreamSupport;
 import org.everit.json.schema.ReferenceSchema;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.SchemaLocation;
@@ -32,7 +33,9 @@ class ReferenceKnot {
     }
 
     void resolveWith(Schema referredSchema) {
-        refs.forEach(ref -> ref.build().setReferredSchema(referredSchema));
+        for(ReferenceSchema.Builder ref: refs) {
+            ref.build().setReferredSchema(referredSchema);
+        }
         this.referredSchema = referredSchema;
     }
 
@@ -62,8 +65,13 @@ class ReferenceLookup {
             return additional;
         }
         Map<String, Object> rawObj = new HashMap<>();
-        original.forEach(rawObj::put);
-        additional.forEach(rawObj::put);
+
+        for(Map.Entry<String, Object> entry: original.entrySet()) {
+            rawObj.put(entry.getKey(), entry.getValue());
+        }
+        for(Map.Entry<String, Object> entry: additional.entrySet()) {
+            rawObj.put(entry.getKey(), entry.getValue());
+        }
         return rawObj;
     }
 
@@ -112,7 +120,7 @@ class ReferenceLookup {
 
     Map<String, Object> withoutRef(JsonObject original) {
         Map<String, Object> rawObj = new HashMap<>();
-        original.keySet().stream()
+        StreamSupport.stream(original.keySet())
                 .filter(name -> !"$ref".equals(name))
                 .forEach(name -> rawObj.put(name, original.get(name)));
         return rawObj;

@@ -42,7 +42,9 @@ class ToStringVisitor extends Visitor {
         Object schemaKeywordValue = schema.getUnprocessedProperties().get("$schema");
         String idKeyword = deduceSpecVersion(schemaKeywordValue).idKeyword();
         writer.ifPresent(idKeyword, schema.getId());
-        schema.getUnprocessedProperties().forEach((key, val) -> writer.key(key).value(val));
+        for (Map.Entry<String, Object> entry: schema.getUnprocessedProperties().entrySet()) {
+            writer.key(entry.getKey()).value(entry.getValue());
+        }
         schema.describePropertiesTo(writer);
         if (!jsonObjectIsOpenForCurrentSchemaInstance) {
             writer.endObject();
@@ -213,12 +215,14 @@ class ToStringVisitor extends Visitor {
     private void describePropertyDependencies(Map<String, Set<String>> propertyDependencies) {
         writer.key("dependencies");
         writer.object();
-        propertyDependencies.forEach((key, value) -> {
-            writer.key(key);
+        for(Map.Entry<String, Set<String>> dependency: propertyDependencies.entrySet()) {
+            writer.key(dependency.getKey());
             writer.array();
-            value.forEach(writer::value);
+            for(String val: dependency.getValue()) {
+                writer.value(val);
+            }
             writer.endArray();
-        });
+        }
         writer.endObject();
     }
 
@@ -236,10 +240,10 @@ class ToStringVisitor extends Visitor {
 
     private void printSchemaMap(Map<?, Schema> schemas) {
         writer.object();
-        schemas.forEach((key, value) -> {
-            writer.key(key.toString());
-            visit(value);
-        });
+        for (Map.Entry<?, Schema> schemaEntry: schemas.entrySet())  {
+            writer.key(schemaEntry.getKey().toString());
+            visit(schemaEntry.getValue());
+        }
         writer.endObject();
     }
 
@@ -254,14 +258,16 @@ class ToStringVisitor extends Visitor {
         printInJsonObject(() -> {
             super.visitCombinedSchema(combinedSchema);
             if (combinedSchema.isSynthetic()) {
-                combinedSchema.getSubschemas().forEach(subschema -> {
+                for(Schema subschema: combinedSchema.getSubschemas()) {
                     this.skipNextObject = true;
                     super.visit(subschema);
-                });
+                }
             } else {
                 writer.key(combinedSchema.getCriterion().toString());
                 writer.array();
-                combinedSchema.getSubschemas().forEach(subschema -> subschema.accept(this));
+                for(Schema subschema: combinedSchema.getSubschemas()) {
+                    subschema.accept(this);
+                }
                 writer.endArray();
             }
         });
@@ -314,7 +320,9 @@ class ToStringVisitor extends Visitor {
         printInJsonObject(() -> {
             writer.key("enum");
             writer.array();
-            schema.getPossibleValues().forEach(writer::value);
+            for(Object possibleValue: schema.getPossibleValues()) {
+                writer.value(possibleValue);
+            }
             writer.endArray();
             super.visitEnumSchema(schema);
         });

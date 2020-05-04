@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java8.lang.FunctionalInterface;
 
 /**
  * Validator for {@code allOf}, {@code oneOf}, {@code anyOf} schemas.

@@ -1,8 +1,9 @@
 package org.everit.json.schema.loader;
 
 import java.io.InputStream;
-import java.util.function.Function;
+import java8.util.function.Function;
 
+import java8.lang.FunctionalInterface;
 import org.everit.json.schema.loader.internal.DefaultSchemaClient;
 
 /**

@@ -1,5 +1,7 @@
 package org.everit.json.schema;
 
+import java8.util.stream.StreamSupport;
+
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
@@ -82,7 +84,7 @@ public class SchemaLocation {
         if (buffer.length() == 0 || (buffer.charAt(buffer.length() - 1) != '#' && !(pointerToLocation.isEmpty()))) {
             buffer.append("#");
         }
-        pointerToLocation.stream()
+        StreamSupport.stream(pointerToLocation)
                 .map(JSONPointer::escape)
                 .forEach(e -> buffer.append("/").append(e));
         return buffer.toString();

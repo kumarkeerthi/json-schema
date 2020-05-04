@@ -2,7 +2,7 @@ package org.everit.json.schema.regexp;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Optional;
+import java8.util.Optional;
 
 public interface Regexp {
 

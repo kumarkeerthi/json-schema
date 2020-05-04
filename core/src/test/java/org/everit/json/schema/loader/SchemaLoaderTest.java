@@ -26,7 +26,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
+import java8.util.Optional;
 
 import org.everit.json.schema.ArraySchema;
 import org.everit.json.schema.BooleanSchema;

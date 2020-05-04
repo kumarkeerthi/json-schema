@@ -1,6 +1,6 @@
 package org.everit.json.schema.internal;
 
-import static java.util.Objects.requireNonNull;
+import static java8.util.Objects.requireNonNull;
 
 import java.io.Writer;
 import java.util.Map;
@@ -78,10 +78,10 @@ public class JSONPrinter {
 
     public <K> void printSchemaMap(Map<K, Schema> input) {
         object();
-        input.entrySet().forEach(entry -> {
-            key(entry.getKey().toString());
-            entry.getValue().describeTo(this);
-        });
+        for(Object inputKey: input.keySet()) {
+            key(inputKey.toString());
+            input.get(inputKey).describeTo(this);
+        }
         endObject();
     }
 }

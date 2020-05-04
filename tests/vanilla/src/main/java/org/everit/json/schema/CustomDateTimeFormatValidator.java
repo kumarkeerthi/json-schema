@@ -3,7 +3,7 @@ package org.everit.json.schema;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Optional;
+import java8.util.Optional;
 
 import org.everit.json.schema.internal.DateTimeFormatValidator;
 

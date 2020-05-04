@@ -7,10 +7,10 @@ import static java.util.Objects.requireNonNull;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
+import java8.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java8.util.function.Consumer;
+import java8.util.function.Function;
 
 class ProjectedJsonObject extends JsonObject {
 
@@ -101,7 +101,9 @@ class ProjectedJsonObject extends JsonObject {
     }
 
     private void removeHiddenKeysFrom(Map<String, Object> map) {
-        hiddenKeys.forEach(map::remove);
+        for(String key: hiddenKeys) {
+            map.remove(key);
+        }
     }
 
     @Override boolean isEmpty() {

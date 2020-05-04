@@ -3,7 +3,7 @@ package org.everit.json.schema.loader;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
+import static java8.util.stream.Collectors.toList;
 import static org.everit.json.schema.loader.OrgJsonUtil.toMap;
 import static org.everit.json.schema.loader.SpecificationVersion.DRAFT_4;
 import static org.everit.json.schema.loader.SpecificationVersion.DRAFT_6;
@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
+import java8.util.Optional;
 
+import java8.util.stream.StreamSupport;
 import org.everit.json.schema.CombinedSchema;
 import org.everit.json.schema.EmptySchema;
 import org.everit.json.schema.FalseSchema;
@@ -154,7 +155,9 @@ public class SchemaLoader {
 
             if (enableOverrideOfBuiltInFormatValidators) {
                 for (Entry<String, FormatValidator> entry : defaultFormatValidators.entrySet()) {
-                    formatValidators.putIfAbsent(entry.getKey(), entry.getValue());
+                    if(!formatValidators.containsKey(entry.getKey())) {
+                        formatValidators.put(entry.getKey(), entry.getValue());
+                    }
                 }
             } else {
                 formatValidators.putAll(defaultFormatValidators);
@@ -393,7 +396,7 @@ public class SchemaLoader {
         } else if (extractedSchemas.size() == 1) {
             effectiveReturnedSchema = extractedSchemas.iterator().next();
         } else {
-            Collection<Schema> built = extractedSchemas.stream()
+            Collection<Schema> built = StreamSupport.stream(extractedSchemas)
                     .map(Schema.Builder::build)
                     .map(Schema.class::cast)
                     .collect(toList());

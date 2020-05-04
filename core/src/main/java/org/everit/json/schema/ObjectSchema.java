@@ -1,7 +1,7 @@
 package org.everit.json.schema;
 
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toMap;
+import static java8.util.Objects.requireNonNull;
+import static java8.util.stream.Collectors.toMap;
 import static org.everit.json.schema.JSONPointer.unescape;
 
 import java.util.AbstractMap;
@@ -11,10 +11,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java8.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import java8.util.stream.StreamSupport;
 import org.everit.json.schema.regexp.JavaUtilRegexpFactory;
 import org.everit.json.schema.regexp.Regexp;
 import org.everit.json.schema.regexp.RegexpFactory;
@@ -230,7 +231,7 @@ public class ObjectSchema extends Schema {
 
     @Deprecated
     public Map<Pattern, Schema> getPatternProperties() {
-        return patternProperties.entrySet().stream()
+        return StreamSupport.stream(patternProperties.entrySet())
                 .map(entry -> new AbstractMap.SimpleEntry<>(java.util.regex.Pattern.compile(entry.getKey().toString()), entry.getValue()))
                 .collect(toMap(
                         (Map.Entry<java.util.regex.Pattern, Schema> entry) -> entry.getKey(),

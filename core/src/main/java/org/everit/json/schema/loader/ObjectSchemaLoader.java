@@ -39,11 +39,11 @@ class ObjectSchemaLoader {
                 .ifPresent(arr -> arr.forEach((i, val) -> builder.addRequiredProperty(val.requireString())));
         ls.schemaJson().maybe("patternProperties").map(JsonValue::requireObject)
                 .ifPresent(patternProps -> {
-                    patternProps.keySet().forEach(pattern -> {
+                    for(String pattern: patternProps.keySet()) {
                         Schema patternSchema = defaultLoader.loadChild(patternProps.require(pattern)).build();
                         Regexp regexp = ls.config.regexpFactory.createHandler(pattern);
                         builder.patternProperty(regexp, patternSchema);
-                    });
+                    }
                 });
         ls.schemaJson().maybe("dependencies").map(JsonValue::requireObject)
                 .ifPresent(deps -> addDependencies(builder, deps));

@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java8.util.Comparators;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +37,7 @@ class LoadingState {
         return parentScopeId;
     }
 
-    static final Comparator<Class<?>> CLASS_COMPARATOR = Comparator.comparing(Class::getSimpleName);
+    static final Comparator<Class<?>> CLASS_COMPARATOR = Comparators.comparing(Class::getSimpleName);
 
     final LoaderConfig config;
 
@@ -166,6 +168,13 @@ class LoadingState {
     }
 
     SubschemaRegistry getSubschemaRegistry(JsonValue rootJson) {
-        return subschemaRegistries.computeIfAbsent(rootJson, SubschemaRegistry::new);
+        if (subschemaRegistries.containsKey(rootJson) && subschemaRegistries.get(rootJson) != null) {
+            return subschemaRegistries.get(rootJson);
+        }
+
+        SubschemaRegistry subschemaRegistry = new SubschemaRegistry(rootJson);
+        subschemaRegistries.put(rootJson, subschemaRegistry);
+
+        return subschemaRegistry;
     }
 }

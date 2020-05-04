@@ -7,9 +7,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 
 import org.everit.json.schema.ResourceLoader;
+import org.everit.json.schema.combatibility.UncheckedIOException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.Before;

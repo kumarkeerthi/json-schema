@@ -13,9 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java8.util.Optional;
 import java.util.Set;
 
+import java8.util.stream.StreamSupport;
 import org.everit.json.schema.ArraySchema;
 import org.everit.json.schema.BooleanSchema;
 import org.everit.json.schema.CombinedSchema;
@@ -126,7 +127,7 @@ abstract class AbstractSchemaExtractor implements SchemaExtractor {
     }
 
     boolean schemaHasAnyOf(Collection<String> propNames) {
-        return propNames.stream().anyMatch(schemaJson::containsKey);
+        return StreamSupport.stream(propNames).anyMatch(schemaJson::containsKey);
     }
 
     LoaderConfig config() {
@@ -134,17 +135,23 @@ abstract class AbstractSchemaExtractor implements SchemaExtractor {
     }
 
     ObjectSchema.Builder buildObjectSchema() {
-        config().specVersion.objectKeywords().forEach(consumedKeys::keyConsumed);
+        for(String objectKey: config().specVersion.objectKeywords()) {
+            consumedKeys.keyConsumed(objectKey);
+        }
         return new ObjectSchemaLoader(schemaJson.ls, config(), defaultLoader).load();
     }
 
     ArraySchema.Builder buildArraySchema() {
-        config().specVersion.arrayKeywords().forEach(consumedKeys::keyConsumed);
+        for(String objectKey: config().specVersion.arrayKeywords()) {
+            consumedKeys.keyConsumed(objectKey);
+        }
         return new ArraySchemaLoader(schemaJson.ls, config(), defaultLoader).load();
     }
 
     NumberSchema.Builder buildNumberSchema() {
-        PropertySnifferSchemaExtractor.NUMBER_SCHEMA_PROPS.forEach(consumedKeys::keyConsumed);
+        for(String objectKey: PropertySnifferSchemaExtractor.NUMBER_SCHEMA_PROPS) {
+            consumedKeys.keyConsumed(objectKey);
+        }
         NumberSchema.Builder builder = NumberSchema.builder();
         maybe("minimum").map(JsonValue::requireNumber).ifPresent(builder::minimum);
         maybe("maximum").map(JsonValue::requireNumber).ifPresent(builder::maximum);
@@ -155,7 +162,9 @@ abstract class AbstractSchemaExtractor implements SchemaExtractor {
     }
 
     StringSchema.Builder buildStringSchema() {
-        PropertySnifferSchemaExtractor.STRING_SCHEMA_PROPS.forEach(consumedKeys::keyConsumed);
+        for(String objectKey: PropertySnifferSchemaExtractor.STRING_SCHEMA_PROPS) {
+            consumedKeys.keyConsumed(objectKey);
+        }
         return new StringSchemaLoader(schemaJson.ls, config().formatValidators).load();
     }
 

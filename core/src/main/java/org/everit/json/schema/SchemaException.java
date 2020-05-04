@@ -3,11 +3,12 @@ package org.everit.json.schema;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
+import static java8.util.stream.Collectors.joining;
 
 import java.util.Collection;
 import java.util.List;
 
+import java8.util.stream.StreamSupport;
 import org.json.JSONObject;
 
 /**
@@ -43,7 +44,7 @@ public class SchemaException extends RuntimeException {
     }
 
     static String buildMessage(String formattedPointer, String actualTypeDescr, Collection<Class<?>> expectedTypes) {
-        String fmtExpectedTypes = expectedTypes.stream()
+        String fmtExpectedTypes = StreamSupport.stream(expectedTypes)
                 .map(Class::getSimpleName)
                 .collect(joining(" or "));
         return format("%s: expected type is one of %s, found: %s", formattedPointer,
@@ -56,7 +57,7 @@ public class SchemaException extends RuntimeException {
     }
 
     private static String joinClassNames(final List<Class<?>> expectedTypes) {
-        return expectedTypes.stream().map(Class::getSimpleName).collect(joining(", "));
+        return StreamSupport.stream(expectedTypes).map(Class::getSimpleName).collect(joining(", "));
     }
 
     private final String schemaLocation;

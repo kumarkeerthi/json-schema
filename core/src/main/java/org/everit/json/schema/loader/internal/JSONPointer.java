@@ -6,11 +6,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
-import java.util.function.Supplier;
+import java8.util.function.Supplier;
 
 import org.everit.json.schema.SchemaException;
+import org.everit.json.schema.combatibility.UncheckedIOException;
 import org.everit.json.schema.loader.SchemaClient;
 import org.json.JSONException;
 import org.json.JSONObject;

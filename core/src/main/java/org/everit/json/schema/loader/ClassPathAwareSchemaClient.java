@@ -6,9 +6,11 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.util.List;
-import java.util.Optional;
+import java8.util.Optional;
+import java8.util.stream.StreamSupport;
+
+import org.everit.json.schema.combatibility.UncheckedIOException;
 
 class ClassPathAwareSchemaClient implements SchemaClient {
 
@@ -39,7 +41,7 @@ class ClassPathAwareSchemaClient implements SchemaClient {
     }
 
     private Optional<String> handleProtocol(String url) {
-        return HANDLED_PREFIXES.stream().filter(url::startsWith)
+        return StreamSupport.stream(HANDLED_PREFIXES).filter(url::startsWith)
                 .map(prefix -> "/" + url.substring(prefix.length()))
                 .findFirst();
     }

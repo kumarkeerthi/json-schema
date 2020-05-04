@@ -1,5 +1,6 @@
 package org.everit.json.schema.loader;
 
+import java8.util.stream.StreamSupport;
 import org.everit.json.schema.FormatValidator;
 import org.everit.json.schema.internal.DateFormatValidator;
 import org.everit.json.schema.internal.DateTimeFormatValidator;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java8.util.Optional;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
@@ -113,8 +114,8 @@ public enum SpecificationVersion {
     }
 
     public static Optional<SpecificationVersion> lookupByMetaSchemaUrl(String metaSchemaUrl) {
-        return Arrays.stream(values())
-                .filter(v -> v.metaSchemaUrls().stream().anyMatch(metaSchemaUrl::startsWith))
+        return StreamSupport.stream(Arrays.asList(values()))
+                .filter(v -> StreamSupport.stream(v.metaSchemaUrls()).anyMatch(metaSchemaUrl::startsWith))
                 .findFirst();
     }
 
